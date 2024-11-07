@@ -34,6 +34,9 @@ public class TaskService {
     }
 
     public Mono<TaskDto> getTaskById(String id) {
+        if (id == null) {
+            return Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "ID cannot be empty"));
+        }
         return taskRepository.findById(id).map(taskMapper::taskToTaskDto);
     }
 
