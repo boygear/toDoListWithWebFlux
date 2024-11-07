@@ -24,6 +24,7 @@ import static org.mockito.Mockito.*;
 class TaskServiceTest {
 
     LocalDateTime dateTime = LocalDateTime.of(2024, 1, 2, 2, 2);
+
     @Mock
     TaskRepository taskRepository;
 
@@ -56,17 +57,16 @@ class TaskServiceTest {
     @Test
     void createTask() {
         var task = new Task("1", "Test Task", "Description", dateTime, TaskStatus.CREATED);
+        var taskBeforeSave = new Task(null, "Test Task", "Description", dateTime, TaskStatus.CREATED);
         var taskDto = new TaskDto(null, "Test Task", "Description", dateTime, TaskStatus.CREATED);
         var taskDtoAfterSave = new TaskDto("1", "Test Task", "Description", dateTime, TaskStatus.CREATED);
-        when(taskRepository.save(task)).thenReturn(Mono.just(task));
-        when(taskMapper.taskDtoToTask(taskDto)).thenReturn(task);
+        when(taskRepository.save(taskBeforeSave)).thenReturn(Mono.just(task));
+        when(taskMapper.taskDtoToTask(taskDto)).thenReturn(taskBeforeSave);
         when(taskMapper.taskToTaskDto(task)).thenReturn(taskDtoAfterSave);
 
         var result = taskService.createTask(taskDto);
 
-        result.subscribe(t -> {
-            Assertions.assertNotNull(t.getId());
-        });
+        result.subscribe(t -> Assertions.assertNotNull(t.getId()));
     }
 
     @Test
@@ -270,7 +270,6 @@ class TaskServiceTest {
         StepVerifier.create(result).expectErrorMessage("400 BAD_REQUEST \"ID cannot be empty\"").verify();
         verifyNoInteractions(taskRepository);
     }
-
 
     String generateLongString() {
         int leftLimit = 97;

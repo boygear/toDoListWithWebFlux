@@ -41,7 +41,7 @@ public class TaskController {
 
     @Operation(summary = "Get task by ID",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Task with specified ID or empty",
+                    @ApiResponse(responseCode = "200", description = "Task with specified ID or empty when task not found",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = TaskDto.class))),
                     @ApiResponse(responseCode = "400", description = "ID cannot be empty", content = @Content(mediaType = "application/json",

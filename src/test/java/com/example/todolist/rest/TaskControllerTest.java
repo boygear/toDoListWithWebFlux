@@ -70,12 +70,12 @@ class TaskControllerTest {
     @Test
     void updateTaskById() {
         var taskDto = new TaskDto("1", "Test Task", "Description", LocalDateTime.now(), TaskStatus.CREATED);
-        when(taskService.updateTaskById("1",taskDto)).thenReturn(Mono.just(taskDto));
+        when(taskService.updateTaskById("1", taskDto)).thenReturn(Mono.just(taskDto));
 
-        var result = taskController.updateTaskById("1",taskDto);
+        var result = taskController.updateTaskById("1", taskDto);
 
         assertEquals(taskDto, result.block());
-        verify(taskService).updateTaskById("1",taskDto);
+        verify(taskService).updateTaskById("1", taskDto);
     }
 
     @Test
